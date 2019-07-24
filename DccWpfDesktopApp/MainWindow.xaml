@@ -5,14 +5,35 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DccWpfDesktopApp"
         xmlns:models="clr-namespace:DccWpfDesktopApp.Models"
+        xmlns:controls="clr-namespace:DccWpfDesktopApp.Controls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" d:DataContext="{d:DesignInstance Type=models:DccControllerModel, IsDesignTimeCreatable=False}">
+        Title="WPF DCC Controller" d:DataContext="{d:DesignInstance Type=models:DccControllerModel, IsDesignTimeCreatable=False}">
     <Window.DataContext>
         <models:DccControllerModel></models:DccControllerModel>
     </Window.DataContext>
-    <Grid>
+    <ScrollViewer>
         <StackPanel>
             <ComboBox ItemsSource="{Binding ComPortsList}" SelectedValue="{Binding Controller.SelectedComPort}"></ComboBox>
+            <!--<controls:LocomotiveController></controls:LocomotiveController>-->
+            <ListView ItemsSource="{Binding Controller.Decoders}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:LocomotiveController></controls:LocomotiveController>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </StackPanel>
-    </Grid>
+    </ScrollViewer>
 </Window>

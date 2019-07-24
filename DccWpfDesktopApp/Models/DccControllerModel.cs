@@ -10,6 +10,7 @@ namespace DccWpfDesktopApp.Models
 
     internal class DccControllerModel
     {
+
         private readonly DccController controller = new DccController();
 
         public DccController Controller

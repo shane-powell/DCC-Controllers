@@ -49,7 +49,10 @@ namespace SerialCommsStandard
 
         public void WriteString(string stringToWrite)
         {
-            this.serialPort.WriteLine(stringToWrite);
+            if (this.serialPort.IsOpen)
+            {
+                this.serialPort.WriteLine(stringToWrite);
+            }
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)

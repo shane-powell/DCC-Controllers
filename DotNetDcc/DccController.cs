@@ -8,6 +8,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace DccControllersLibNetStandard
 {
@@ -19,7 +20,7 @@ namespace DccControllersLibNetStandard
 
     public class DccController : INotifyPropertyChanged
     {
-        private List<DccDecoder> decoders = new List<DccDecoder>();
+        private ObservableCollection<DccDecoder> decoders = new ObservableCollection<DccDecoder>();
 
         private SerialAdapter serialAdapter;
 
@@ -27,7 +28,7 @@ namespace DccControllersLibNetStandard
 
         private const int BaudRate = 115200;
 
-        public List<DccDecoder> Decoders
+        public ObservableCollection<DccDecoder> Decoders
         {
             get
             {
@@ -51,6 +52,20 @@ namespace DccControllersLibNetStandard
                 this.OnPropertyChanged();
                 this.ConnectToPort();
             }
+        }
+
+        public DccController()
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                DccDecoder decoder = new DccDecoder(this.SendCommand) {Address = i, Name = $"Loco {i}"};
+                this.decoders.Add(decoder);
+            }
+        }
+
+        private void SendCommand(string command)
+        {
+            this?.serialAdapter.WriteString(command);
         }
 
         private void ConnectToPort()
