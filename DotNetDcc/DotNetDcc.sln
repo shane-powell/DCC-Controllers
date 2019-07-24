@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29009.5
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DccControllersLibNetStandard", "DccControllersLibNetStandard.csproj", "{B4C2D398-1784-4F1B-BFB2-FDF931C01A6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DccControllersLibNetStandard", "DccControllersLibNetStandard.csproj", "{B4C2D398-1784-4F1B-BFB2-FDF931C01A6E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SerialCommsStandard", "..\SerialCommsStandard\SerialCommsStandard.csproj", "{9A4573FE-D760-405E-9106-143F37E039D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DccWpfDesktopApp", "..\DccWpfDesktopApp\DccWpfDesktopApp.csproj", "{3F029E6D-A273-4736-AED8-D6993214BD07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{B4C2D398-1784-4F1B-BFB2-FDF931C01A6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4C2D398-1784-4F1B-BFB2-FDF931C01A6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4C2D398-1784-4F1B-BFB2-FDF931C01A6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4573FE-D760-405E-9106-143F37E039D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4573FE-D760-405E-9106-143F37E039D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4573FE-D760-405E-9106-143F37E039D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4573FE-D760-405E-9106-143F37E039D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F029E6D-A273-4736-AED8-D6993214BD07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F029E6D-A273-4736-AED8-D6993214BD07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F029E6D-A273-4736-AED8-D6993214BD07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F029E6D-A273-4736-AED8-D6993214BD07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
