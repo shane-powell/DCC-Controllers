@@ -13,7 +13,11 @@
     </Window.DataContext>
     <ScrollViewer>
         <StackPanel>
-            <ComboBox ItemsSource="{Binding ComPortsList}" SelectedValue="{Binding Controller.SelectedComPort}"></ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Arduino COM port" VerticalAlignment="Center" FontWeight="Bold" Margin="3"></TextBlock>
+                <ComboBox ItemsSource="{Binding ComPortsList}" SelectedValue="{Binding Controller.SelectedComPort}" Margin="3" MinWidth="70"></ComboBox>
+                <Button Content="Power" Margin="30,3,3,3" Command="{Binding Controller.TogglePowerCommand}"></Button>
+            </StackPanel>
             <!--<controls:LocomotiveController></controls:LocomotiveController>-->
             <ListView ItemsSource="{Binding Controller.Decoders}">
                 <ListView.ItemTemplate>

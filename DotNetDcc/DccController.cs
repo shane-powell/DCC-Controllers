@@ -28,6 +28,10 @@ namespace DccControllersLibNetStandard
 
         private const int BaudRate = 115200;
 
+        private bool power = false;
+
+        private RelayCommand togglePowerCommand;
+
         public ObservableCollection<DccDecoder> Decoders
         {
             get
@@ -54,18 +58,42 @@ namespace DccControllersLibNetStandard
             }
         }
 
+        public bool Power
+        {
+            get { return power; }
+            set
+            {
+                power = value; 
+
+            }
+        }
+
+        public RelayCommand TogglePowerCommand
+        {
+            get { return togglePowerCommand; }
+            set { togglePowerCommand = value; }
+        }
+
         public DccController()
         {
-            for (int i = 0; i < 6; i++)
+            this.TogglePowerCommand = new RelayCommand(this.TogglePower);
+
+            for (int i = 1; i < 7; i++)
             {
                 DccDecoder decoder = new DccDecoder(this.SendCommand) {Address = i, Name = $"Loco {i}"};
                 this.decoders.Add(decoder);
             }
         }
 
+        private void TogglePower()
+        {
+            this.power = !this.power;
+            this.SendCommand(power ? "<1>" : "<0>");
+        }
+
         private void SendCommand(string command)
         {
-            this?.serialAdapter.WriteString(command);
+            this.serialAdapter?.WriteString(command);
         }
 
         private void ConnectToPort()

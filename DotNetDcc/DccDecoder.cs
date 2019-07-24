@@ -58,8 +58,8 @@ namespace DccControllersLibNetStandard
             get { return speed; }
             set
             {
-                speed = value; 
-
+                speed = value;
+                this.UpdateLocomotion();
             }
         }
 
@@ -88,10 +88,16 @@ namespace DccControllersLibNetStandard
             set { lights = value; }
         }
 
+        public RelayCommand ToggleLightsCommand
+        {
+            get { return toggleLightsCommand; }
+            set { toggleLightsCommand = value; }
+        }
+
         public DccDecoder(Action<string> sendCommandDelegate)
         {
             this.sendCommandDelegate = sendCommandDelegate;
-            this.toggleLightsCommand = new RelayCommand(this.ToggleLights);
+            this.ToggleLightsCommand = new RelayCommand(this.ToggleLights);
         }
 
         private void ToggleLights()

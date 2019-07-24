@@ -435,7 +435,7 @@
             <Slider Minimum="0" Maximum="1" Grid.Row="1" Orientation="Horizontal" Value="{Binding Direction}" Style="{x:Null}" TickFrequency="1" TickPlacement="Both" MinWidth="50">
             </Slider>
             <TextBlock Text="Forwards" Style="{StaticResource Header}" VerticalAlignment="Center"></TextBlock>
-            <Button Content="Lights" Height="Auto" Margin="30,3,3,3"></Button>
+            <Button Content="Lights" Height="Auto" Margin="30,3,3,3" Command="{Binding ToggleLightsCommand}"></Button>
         </StackPanel>
 
 
