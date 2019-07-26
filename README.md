@@ -3,6 +3,11 @@ Custom controllers for DCC++
 
 WPF Desktop App.
 
+## Requirements
+  * Net 4.7.2 Runtime.
+
+  * Arduino and Motor Shield running DCC++ Basestation.
+
 ![Alt text](https://img.shields.io/badge/Initial%20Release-v0.1-green)
 
 The binaries for this release can be downloaded from the releases section.
