@@ -6,7 +6,7 @@ Custom controllers for DCC++
 ### Requirements
   * Net 4.7.2 Runtime.
 
-  * Arduino and Motor Shield running DCC++ Basestation.
+  * Arduino and Motor Shield running [DCC++ Basestation](https://github.com/DccPlusPlus/BaseStation).
 
 [![Alt text](https://img.shields.io/badge/Initial%20Release-v0.1-green)](https://github.com/shane-powell/DotNet-DCC/releases/tag/v0.1-alpha)
 
