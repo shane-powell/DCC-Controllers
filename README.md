@@ -1,9 +1,9 @@
 # DotNet-DCC
 Custom controllers for DCC++
 
-WPF Desktop App.
+## WPF Desktop App.
 
-## Requirements
+### Requirements
   * Net 4.7.2 Runtime.
 
   * Arduino and Motor Shield running DCC++ Basestation.
