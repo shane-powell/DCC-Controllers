@@ -8,7 +8,7 @@ WPF Desktop App.
 
   * Arduino and Motor Shield running DCC++ Basestation.
 
-![Alt text](https://img.shields.io/badge/Initial%20Release-v0.1-green)
+[![Alt text](https://img.shields.io/badge/Initial%20Release-v0.1-green)](https://github.com/shane-powell/DotNet-DCC/releases/tag/v0.1-alpha)
 
 The binaries for this release can be downloaded from the releases section.
 
