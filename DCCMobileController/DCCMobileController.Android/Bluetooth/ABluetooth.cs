@@ -81,7 +81,6 @@ namespace DCCMobileController.Droid.Bluetooth
         private async Task loop(string name, int sleepTime, bool readAsCharArray)
         {
             BluetoothDevice device = null;
-            BluetoothSocket socket = null;
 
             this.cancellationTokenSource = new CancellationTokenSource();
             while (this.cancellationTokenSource.IsCancellationRequested == false)
@@ -126,78 +125,83 @@ namespace DCCMobileController.Droid.Bluetooth
                     else
                     {
                         UUID uuid = UUID.FromString("00001101-0000-1000-8000-00805f9b34fb");
-                        socket = (int)Android.OS.Build.VERSION.SdkInt >= 10 ? device.CreateInsecureRfcommSocketToServiceRecord(uuid) : device.CreateRfcommSocketToServiceRecord(uuid);
-
-                        if (socket != null)
+                        using (var socket = (int)Android.OS.Build.VERSION.SdkInt >= 10
+                                                ? device.CreateInsecureRfcommSocketToServiceRecord(uuid)
+                                                : device.CreateRfcommSocketToServiceRecord(uuid))
                         {
-                            await socket.ConnectAsync();
-                            var writer = new OutputStreamWriter(socket.OutputStream);
-                            if (socket.IsConnected)
+                            if (socket != null)
                             {
-                                System.Diagnostics.Debug.WriteLine("Connected!");
-                                var mReader = new InputStreamReader(socket.InputStream);
-                                var buffer = new BufferedReader(mReader);
-                                while (this.cancellationTokenSource.IsCancellationRequested == false)
+                                await socket.ConnectAsync();
+                                var writer = new OutputStreamWriter(socket.OutputStream);
+                                if (socket.IsConnected)
                                 {
-                                    lock (this.messageLockObject)
+                                    System.Diagnostics.Debug.WriteLine("Connected!");
+                                    using (var mReader = new InputStreamReader(socket.InputStream))
                                     {
-                                        foreach (var message in this.messagesToSend)
+                                        using (var buffer = new BufferedReader(mReader))
                                         {
-                                            writer.Write(message);
-                                            writer.Flush();
-                                        }
-                                    }
-
-                                    if (buffer.Ready())
-                                    {
-
-                                        char[] chr = new char[100];
-                                        string incomingData = string.Empty;
-                                        if (readAsCharArray)
-                                        {
-
-                                            await buffer.ReadAsync(chr);
-                                            foreach (char c in chr)
+                                            while (this.cancellationTokenSource.IsCancellationRequested == false)
                                             {
-                                                if (c == '\0')
+                                                lock (this.messageLockObject)
                                                 {
-                                                    break;
+                                                    foreach (var message in this.messagesToSend)
+                                                    {
+                                                        writer.Write(message);
+                                                        writer.Flush();
+                                                    }
                                                 }
 
-                                                incomingData += c;
+                                                if (buffer.Ready())
+                                                {
+
+                                                    char[] chr = new char[100];
+                                                    string incomingData = string.Empty;
+                                                    if (readAsCharArray)
+                                                    {
+
+                                                        await buffer.ReadAsync(chr);
+                                                        foreach (char c in chr)
+                                                        {
+                                                            if (c == '\0')
+                                                            {
+                                                                break;
+                                                            }
+
+                                                            incomingData += c;
+                                                        }
+
+                                                    }
+                                                    else
+                                                        incomingData = await buffer.ReadLineAsync();
+
+                                                    if (incomingData.Length > 0)
+                                                    {
+                                                        System.Diagnostics.Debug.WriteLine(
+                                                            "New Message: " + incomingData);
+                                                        Xamarin.Forms.MessagingCenter.Send<App, string>(
+                                                            (App)Xamarin.Forms.Application.Current,
+                                                            "Barcode",
+                                                            incomingData);
+                                                    }
+                                                }
+
+                                                System.Threading.Thread.Sleep(sleepTime);
+                                                if (!socket.IsConnected)
+                                                {
+                                                    System.Diagnostics.Debug.WriteLine(
+                                                        "BthSocket.IsConnected = false, Throw exception");
+                                                    throw new Exception();
+                                                }
                                             }
 
+                                            System.Diagnostics.Debug.WriteLine("Exit the inner loop");
                                         }
-                                        else
-                                            incomingData = await buffer.ReadLineAsync();
-
-                                        if (incomingData.Length > 0)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine("New Message: " + incomingData);
-                                            Xamarin.Forms.MessagingCenter.Send<App, string>((App)Xamarin.Forms.Application.Current, "Barcode", incomingData);
-                                        }
-                                        else
-                                            System.Diagnostics.Debug.WriteLine("No data");
-
-                                    }
-                                    else
-                                        System.Diagnostics.Debug.WriteLine("No data to read");
-
-                                    System.Threading.Thread.Sleep(sleepTime);
-                                    if (!socket.IsConnected)
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("BthSocket.IsConnected = false, Throw exception");
-                                        throw new Exception();
                                     }
                                 }
-
-                                System.Diagnostics.Debug.WriteLine("Exit the inner loop");
-
                             }
+                            else
+                                System.Diagnostics.Debug.WriteLine("BthSocket = null");
                         }
-                        else
-                            System.Diagnostics.Debug.WriteLine("BthSocket = null");
-
                     }
 
 
@@ -208,7 +212,6 @@ namespace DCCMobileController.Droid.Bluetooth
                 }
                 finally
                 {
-                    socket?.Close();
                     device = null;
                     adapter = null;
                 }

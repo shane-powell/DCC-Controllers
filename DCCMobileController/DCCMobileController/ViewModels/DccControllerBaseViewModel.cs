@@ -14,7 +14,7 @@ namespace DCCMobileController.ViewModels
 
     public class DccControllerBaseViewModel
     {
-        private int _sleepTime;
+        private int sleepTime = 0;
 
         private bool isConnected = true;
 
@@ -39,7 +39,7 @@ namespace DCCMobileController.ViewModels
 
                     // When the app "resume" I try to restart the connection with bluetooth
                     if (this.isConnected)
-                        DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, _sleepTime, true);
+                        DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, this.sleepTime, true);
 
                 });
 
@@ -47,7 +47,7 @@ namespace DCCMobileController.ViewModels
             this.ConnectCommand = new Command(() => {
 
                     // Try to connect to a bth device
-                    DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, _sleepTime, true);
+                    DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, this.sleepTime, true);
                     this.isConnected = true;
 
                     // Receive data from bth device
