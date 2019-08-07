@@ -1,28 +1,50 @@
-﻿using System;
-using Android.Bluetooth;
-using Java.Util;
-using System.Threading.Tasks;
-using Java.IO;
-using TestBth.Droid;
-using System.Threading;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ABluetooth.cs" company="Shane Powell">
+//   
+// </copyright>
+// <summary>
+//   Defines the ABluetooth type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+using DCCMobileController.Droid.Bluetooth;
 
 [assembly: Xamarin.Forms.Dependency(typeof(ABluetooth))]
-namespace TestBth.Droid
+
+namespace DCCMobileController.Droid.Bluetooth
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Threading;
+    using System.Threading.Tasks;
+
+    using Android.Bluetooth;
+
     using DCCMobileController;
     using DCCMobileController.Bluetooth;
 
+    using Java.IO;
+    using Java.Util;
+
+    /// <summary>
+    /// An Android implementation of the IBluetooth interface.
+    /// </summary>
     public class ABluetooth : IBluetooth
     {
 
-        private CancellationTokenSource _ct { get; set; }
+        private CancellationTokenSource cancellationTokenSource { get; set; }
 
         const int RequestResolveError = 1000;
 
+        /// <summary>
+        /// The messages to send.
+        /// </summary>
         private readonly List<string> messagesToSend = new List<string>();
 
+        /// <summary>
+        /// The message lock object.
+        /// </summary>
         private readonly object messageLockObject = new object();
 
         public ABluetooth()
@@ -37,7 +59,7 @@ namespace TestBth.Droid
         public void Start(string name, int sleepTime = 200, bool readAsCharArray = false)
         {
 
-            Task.Run(async () => loop(name, sleepTime, readAsCharArray));
+            Task.Run(async () => this.loop(name, sleepTime, readAsCharArray));
         }
 
         private async Task loop(string name, int sleepTime, bool readAsCharArray)
@@ -45,9 +67,9 @@ namespace TestBth.Droid
             BluetoothDevice device = null;
             BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
             BluetoothSocket BthSocket = null;
-            
-            _ct = new CancellationTokenSource();
-            while (_ct.IsCancellationRequested == false)
+
+            this.cancellationTokenSource = new CancellationTokenSource();
+            while (this.cancellationTokenSource.IsCancellationRequested == false)
             {
 
                 try
@@ -85,14 +107,11 @@ namespace TestBth.Droid
                     else
                     {
                         UUID uuid = UUID.FromString("00001101-0000-1000-8000-00805f9b34fb");
-                        if ((int)Android.OS.Build.VERSION.SdkInt >= 10) // Gingerbread 2.3.3 2.3.4
-                            BthSocket = device.CreateInsecureRfcommSocketToServiceRecord(uuid);
-                        else
-                            BthSocket = device.CreateRfcommSocketToServiceRecord(uuid);
+                        BthSocket = (int)Android.OS.Build.VERSION.SdkInt >= 10 ? device.CreateInsecureRfcommSocketToServiceRecord(uuid) : device.CreateRfcommSocketToServiceRecord(uuid);
 
                         if (BthSocket != null)
                         {
-                            
+
                             await BthSocket.ConnectAsync();
                             var writer = new OutputStreamWriter(BthSocket.OutputStream);
                             if (BthSocket.IsConnected)
@@ -100,7 +119,7 @@ namespace TestBth.Droid
                                 System.Diagnostics.Debug.WriteLine("Connected!");
                                 var mReader = new InputStreamReader(BthSocket.InputStream);
                                 var buffer = new BufferedReader(mReader);
-                                while (_ct.IsCancellationRequested == false)
+                                while (this.cancellationTokenSource.IsCancellationRequested == false)
                                 {
                                     lock (this.messageLockObject)
                                     {
@@ -113,29 +132,31 @@ namespace TestBth.Droid
 
                                     if (buffer.Ready())
                                     {
-                                        
+
                                         char[] chr = new char[100];
-                                        string barcode = "";
+                                        string incomingData = string.Empty;
                                         if (readAsCharArray)
                                         {
 
                                             await buffer.ReadAsync(chr);
                                             foreach (char c in chr)
                                             {
-
                                                 if (c == '\0')
+                                                {
                                                     break;
-                                                barcode += c;
+                                                }
+
+                                                incomingData += c;
                                             }
 
                                         }
                                         else
-                                            barcode = await buffer.ReadLineAsync();
+                                            incomingData = await buffer.ReadLineAsync();
 
-                                        if (barcode.Length > 0)
+                                        if (incomingData.Length > 0)
                                         {
-                                            System.Diagnostics.Debug.WriteLine("Letto: " + barcode);
-                                            Xamarin.Forms.MessagingCenter.Send<App, string>((App)Xamarin.Forms.Application.Current, "Barcode", barcode);
+                                            System.Diagnostics.Debug.WriteLine("New Message: " + incomingData);
+                                            Xamarin.Forms.MessagingCenter.Send<App, string>((App)Xamarin.Forms.Application.Current, "Barcode", incomingData);
                                         }
                                         else
                                             System.Diagnostics.Debug.WriteLine("No data");
@@ -186,10 +207,10 @@ namespace TestBth.Droid
         /// <returns><c>true</c> if this instance cancel ; otherwise, <c>false</c>.</returns>
         public void Cancel()
         {
-            if (_ct != null)
+            if (this.cancellationTokenSource != null)
             {
                 System.Diagnostics.Debug.WriteLine("Send a cancel to task!");
-                _ct.Cancel();
+                this.cancellationTokenSource.Cancel();
             }
         }
 
