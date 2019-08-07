@@ -10,6 +10,8 @@ namespace DCCMobileController.Bluetooth
     {
         void Start(string name, int sleepTime, bool readAsCharArray);
         void Cancel();
+
+        void Send(string messageToSend);
         ObservableCollection<string> PairedDevices();
     }
 

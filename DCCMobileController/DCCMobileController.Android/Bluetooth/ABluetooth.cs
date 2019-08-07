@@ -21,11 +21,14 @@ namespace TestBth.Droid
 
         const int RequestResolveError = 1000;
 
+        private readonly List<string> messagesToSend = new List<string>();
+
+        private readonly object messageLockObject = new object();
+
         public ABluetooth()
         {
         }
 
-        #region IBth implementation
 
         /// <summary>
         /// Start the "reading" loop 
@@ -36,8 +39,6 @@ namespace TestBth.Droid
 
             Task.Run(async () => loop(name, sleepTime, readAsCharArray));
         }
-
-
 
         private async Task loop(string name, int sleepTime, bool readAsCharArray)
         {
@@ -92,26 +93,28 @@ namespace TestBth.Droid
                         if (BthSocket != null)
                         {
                             
-                            //Task.Run ((Func<Task>)loop); /*) => {
                             await BthSocket.ConnectAsync();
-
-
+                            var writer = new OutputStreamWriter(BthSocket.OutputStream);
                             if (BthSocket.IsConnected)
                             {
                                 System.Diagnostics.Debug.WriteLine("Connected!");
                                 var mReader = new InputStreamReader(BthSocket.InputStream);
                                 var buffer = new BufferedReader(mReader);
-                                //buffer.re
                                 while (_ct.IsCancellationRequested == false)
                                 {
+                                    lock (this.messageLockObject)
+                                    {
+                                        foreach (var message in this.messagesToSend)
+                                        {
+                                            writer.Write(message);
+                                            writer.Flush();
+                                        }
+                                    }
+
                                     if (buffer.Ready())
                                     {
-                                        //										string barcode =  buffer
-                                        //string barcode = buffer.
-
-                                        //string barcode = await buffer.ReadLineAsync();
+                                        
                                         char[] chr = new char[100];
-                                        //await buffer.ReadAsync(chr);
                                         string barcode = "";
                                         if (readAsCharArray)
                                         {
@@ -190,6 +193,14 @@ namespace TestBth.Droid
             }
         }
 
+        public void Send(string messageToSend)
+        {
+            lock (this.messageLockObject)
+            {
+                this.messagesToSend.Add(messageToSend);
+            }
+        }
+
         public ObservableCollection<string> PairedDevices()
         {
             BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
@@ -201,7 +212,5 @@ namespace TestBth.Droid
             return devices;
         }
 
-
-        #endregion
     }
 }
