@@ -6,6 +6,8 @@ using DCCMobileController.Views;
 
 namespace DCCMobileController
 {
+    using DCCMobileController.ViewModels;
+
     public partial class App : Application
     {
 
@@ -15,6 +17,8 @@ namespace DCCMobileController
 
             DependencyService.Register<MockDataStore>();
             MainPage = new MainPage();
+
+            DccControllerBaseViewModel model = new DccControllerBaseViewModel();
         }
 
         protected override void OnStart()
@@ -25,11 +29,13 @@ namespace DCCMobileController
         protected override void OnSleep()
         {
             // Handle when your app sleeps
+            MessagingCenter.Send<App>(this, "Sleep"); // When app sleep, send a message so I can "Cancel" the connection
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
+            MessagingCenter.Send<App>(this, "Resume"); // When app resume, send a message so I can "Resume" the connection
         }
     }
 }
