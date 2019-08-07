@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCMobileController.Android
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCMobileController.iOS", "DCCMobileController.iOS\DCCMobileController.iOS.csproj", "{0A1ECC12-0DEB-4A33-862B-0F2FB6FC2CC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCCMobileController", "DCCMobileController\DCCMobileController.csproj", "{5B59F16A-30BE-48EC-B515-07E2CFDE8206}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DCCMobileController", "DCCMobileController\DCCMobileController.csproj", "{5B59F16A-30BE-48EC-B515-07E2CFDE8206}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DccControllersLibNetStandard", "..\DotNetDcc\DccControllersLibNetStandard.csproj", "{7427FF39-1B8F-4D82-9317-989FB0A28A8C}"
 EndProject

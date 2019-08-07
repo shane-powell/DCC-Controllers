@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="ABluetooth.cs" company="Shane Powell">
-//   
+//   Copyright (c) Shane Powell. All rights reserved.
 // </copyright>
 // <summary>
 //   Defines the ABluetooth type.
@@ -32,11 +32,6 @@ namespace DCCMobileController.Droid.Bluetooth
     /// </summary>
     public class ABluetooth : IBluetooth
     {
-
-        private CancellationTokenSource cancellationTokenSource { get; set; }
-
-        const int RequestResolveError = 1000;
-
         /// <summary>
         /// The messages to send.
         /// </summary>
@@ -47,6 +42,14 @@ namespace DCCMobileController.Droid.Bluetooth
         /// </summary>
         private readonly object messageLockObject = new object();
 
+        /// <summary>
+        /// A token to cancel the Bluetooth interaction task.
+        /// </summary>
+        private CancellationTokenSource cancellationTokenSource;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ABluetooth"/> class.
+        /// </summary>
         public ABluetooth()
         {
         }
@@ -187,12 +190,11 @@ namespace DCCMobileController.Droid.Bluetooth
                 }
                 catch
                 {
+                    // ignored
                 }
-
                 finally
                 {
-                    if (BthSocket != null)
-                        BthSocket.Close();
+                    BthSocket?.Close();
                     device = null;
                     adapter = null;
                 }
