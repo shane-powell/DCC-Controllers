@@ -27,6 +27,8 @@ namespace DCCMobileController.Droid.Bluetooth
     using Java.IO;
     using Java.Util;
 
+    using Xamarin.Forms;
+
     /// <summary>
     /// An Android implementation of the IBluetooth interface.
     /// </summary>
@@ -65,16 +67,26 @@ namespace DCCMobileController.Droid.Bluetooth
             Task.Run(async () => this.loop(name, sleepTime, readAsCharArray));
         }
 
+        /// <summary>
+        /// broadcasts the bluetooth status.
+        /// </summary>
+        /// <param name="statusMessage">
+        /// The status message.
+        /// </param>
+        private void BroadcastBluetoothStatus(string statusMessage)
+        {
+            MessagingCenter.Send<App, string>((App)Application.Current, "BluetoothStatus", statusMessage);
+        }
+
         private async Task loop(string name, int sleepTime, bool readAsCharArray)
         {
             BluetoothDevice device = null;
-            BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
-            BluetoothSocket BthSocket = null;
+            BluetoothSocket socket = null;
 
             this.cancellationTokenSource = new CancellationTokenSource();
             while (this.cancellationTokenSource.IsCancellationRequested == false)
             {
-
+                BluetoothAdapter adapter = null;
                 try
                 {
                     Thread.Sleep(sleepTime);
@@ -82,21 +94,22 @@ namespace DCCMobileController.Droid.Bluetooth
                     adapter = BluetoothAdapter.DefaultAdapter;
 
                     if (adapter == null)
-                        System.Diagnostics.Debug.WriteLine("No Bluetooth adapter found.");
-                    else
-                        System.Diagnostics.Debug.WriteLine("Adapter found!!");
+                    {
+                        this.BroadcastBluetoothStatus("No Bluetooth adapter found.");
+                        return;
+                    }
 
                     if (!adapter.IsEnabled)
-                        System.Diagnostics.Debug.WriteLine("Bluetooth adapter is not enabled.");
-                    else
-                        System.Diagnostics.Debug.WriteLine("Adapter enabled!");
+                    {
+                        this.BroadcastBluetoothStatus("Bluetooth is disabled.");
+                        return;
+                    }
 
-                    System.Diagnostics.Debug.WriteLine("Try to connect to " + name);
-
+                    // Try to find device with supplied name
                     foreach (var bd in adapter.BondedDevices)
                     {
                         System.Diagnostics.Debug.WriteLine("Paired devices found: " + bd.Name.ToUpper());
-                        if (bd.Name.ToUpper().IndexOf(name.ToUpper()) >= 0)
+                        if (bd.Name.ToUpper().IndexOf(name.ToUpper(), StringComparison.Ordinal) >= 0)
                         {
 
                             System.Diagnostics.Debug.WriteLine("Found " + bd.Name + ". Try to connect with it!");
@@ -106,21 +119,23 @@ namespace DCCMobileController.Droid.Bluetooth
                     }
 
                     if (device == null)
-                        System.Diagnostics.Debug.WriteLine("Named device not found.");
+                    {
+                        this.BroadcastBluetoothStatus($"Could not find device named {name}.");
+                        return;
+                    }
                     else
                     {
                         UUID uuid = UUID.FromString("00001101-0000-1000-8000-00805f9b34fb");
-                        BthSocket = (int)Android.OS.Build.VERSION.SdkInt >= 10 ? device.CreateInsecureRfcommSocketToServiceRecord(uuid) : device.CreateRfcommSocketToServiceRecord(uuid);
+                        socket = (int)Android.OS.Build.VERSION.SdkInt >= 10 ? device.CreateInsecureRfcommSocketToServiceRecord(uuid) : device.CreateRfcommSocketToServiceRecord(uuid);
 
-                        if (BthSocket != null)
+                        if (socket != null)
                         {
-
-                            await BthSocket.ConnectAsync();
-                            var writer = new OutputStreamWriter(BthSocket.OutputStream);
-                            if (BthSocket.IsConnected)
+                            await socket.ConnectAsync();
+                            var writer = new OutputStreamWriter(socket.OutputStream);
+                            if (socket.IsConnected)
                             {
                                 System.Diagnostics.Debug.WriteLine("Connected!");
-                                var mReader = new InputStreamReader(BthSocket.InputStream);
+                                var mReader = new InputStreamReader(socket.InputStream);
                                 var buffer = new BufferedReader(mReader);
                                 while (this.cancellationTokenSource.IsCancellationRequested == false)
                                 {
@@ -168,9 +183,8 @@ namespace DCCMobileController.Droid.Bluetooth
                                     else
                                         System.Diagnostics.Debug.WriteLine("No data to read");
 
-                                    // A little stop to the uneverending thread...
                                     System.Threading.Thread.Sleep(sleepTime);
-                                    if (!BthSocket.IsConnected)
+                                    if (!socket.IsConnected)
                                     {
                                         System.Diagnostics.Debug.WriteLine("BthSocket.IsConnected = false, Throw exception");
                                         throw new Exception();
@@ -194,7 +208,7 @@ namespace DCCMobileController.Droid.Bluetooth
                 }
                 finally
                 {
-                    BthSocket?.Close();
+                    socket?.Close();
                     device = null;
                     adapter = null;
                 }
