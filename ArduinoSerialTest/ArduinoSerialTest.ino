@@ -2,7 +2,8 @@ char c;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  //Serial.begin(115200);
+  Serial.begin(9600);
   Serial.flush();
 }
 

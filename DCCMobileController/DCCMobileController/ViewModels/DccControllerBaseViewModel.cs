@@ -22,14 +22,19 @@ namespace DCCMobileController.ViewModels
 
         private Command disconnectCommand = null;
 
+        private string selectedDevice = "HC-06";
+
+        private readonly DccController controller = new DccController();
+
+
 
         public DccControllerBaseViewModel()
         {
             MessagingCenter.Subscribe<App>(this, "Sleep", (obj) =>
                 {
                     // When the app "sleep", I close the connection with bluetooth
-                    if (this.isConnected)
-                        DependencyService.Get<IBluetooth>().Cancel();
+                    //if (this.isConnected)
+                    //    DependencyService.Get<IBluetooth>().Cancel();
 
                 });
 
@@ -38,8 +43,8 @@ namespace DCCMobileController.ViewModels
                 {
 
                     // When the app "resume" I try to restart the connection with bluetooth
-                    if (this.isConnected)
-                        DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, this.sleepTime, true);
+                    //if (this.isConnected)
+                    //    DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
 
                 });
 
@@ -47,21 +52,15 @@ namespace DCCMobileController.ViewModels
             this.ConnectCommand = new Command(() => {
 
                     // Try to connect to a bth device
-                    DependencyService.Get<IBluetooth>().Start(SelectedBthDevice, this.sleepTime, true);
+                    DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
                     this.isConnected = true;
 
-                    // Receive data from bth device
-                    MessagingCenter.Subscribe<App, string>(this, "Barcode", (sender, arg) => {
-
-                            // Add the barcode to a list (first position)
-                        });
                 });
 
             this.DisconnectCommand = new Command(() => {
 
                     // Disconnect from bth device
                     DependencyService.Get<IBluetooth>().Cancel();
-                    MessagingCenter.Unsubscribe<App, string>(this, "Barcode");
                     this.isConnected = false;
                 });
 
@@ -75,9 +74,10 @@ namespace DCCMobileController.ViewModels
             {
                 Application.Current.MainPage.DisplayAlert("Attention", ex.Message, "Ok");
             }
+
+            //DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
         }
 
-        public string SelectedBthDevice { get; set; } = "test";
 
         public ObservableCollection<string> ListOfDevices { get; set; }
 
@@ -102,6 +102,26 @@ namespace DCCMobileController.ViewModels
             set
             {
                 this.disconnectCommand = value;
+            }
+        }
+
+        public string SelectedDevice
+        {
+            get
+            {
+                return this.selectedDevice;
+            }
+            set
+            {
+                this.selectedDevice = value;
+            }
+        }
+
+        public DccController Controller
+        {
+            get
+            {
+                return this.controller;
             }
         }
     }

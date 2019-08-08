@@ -16,9 +16,9 @@ namespace DCCMobileController
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
-            MainPage = new MainPage();
+            MainPage = new MainPage() { BindingContext = new DccControllerBaseViewModel() };
 
-            DccControllerBaseViewModel model = new DccControllerBaseViewModel();
+            //DccControllerBaseViewModel model = new DccControllerBaseViewModel();
         }
 
         protected override void OnStart()
