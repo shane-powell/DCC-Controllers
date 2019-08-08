@@ -10,11 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace DCCMobileController.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ControllerView : ContentView
+    public partial class ControllerView : ViewCell
     {
         public ControllerView()
         {
-            InitializeComponent();
+
+                this.InitializeComponent();
         }
     }
 }

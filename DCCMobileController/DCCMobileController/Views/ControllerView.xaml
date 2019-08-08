@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="DCCMobileController.Views.ControllerView">
-  <ContentView.Content>
-      <Grid>
-          <!--<Grid.Resources>
+    <ViewCell.View>
+        <Grid HorizontalOptions="Fill">
+          <Grid.Resources>
               <Style TargetType="Label" x:Key="Header">
                   <Setter Property="FontAttributes" Value="Bold"></Setter>
                   <Setter Property="Margin" Value="3"></Setter>
@@ -24,27 +24,27 @@
               <RowDefinition Height="Auto"></RowDefinition>
             </Grid.RowDefinitions>
 
-          <StackLayout Orientation="Horizontal" Grid.Row="0">
+            <StackLayout Orientation="Horizontal" Grid.Row="0" HorizontalOptions="Fill">
               <Label Text="Name:" Style="{StaticResource Header}"></Label>
                 <Label Text="{Binding Name}" Style="{StaticResource TextBlockValue}"></Label>
                 <Label Text="Address" Style="{StaticResource Header}"></Label>
                 <Label Text="{Binding Address}" Style="{StaticResource TextBlockValue}"></Label>
           </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Grid.Row="1">
+            <StackLayout Orientation="Horizontal" Grid.Row="1" HorizontalOptions="Fill">
                 <Label Text="Speed" Style="{StaticResource Header}" VerticalTextAlignment="Center"></Label>
-                <Slider Maximum="126" Minimum="0" Grid.Row="1" Value="{Binding Speed}" MinimumWidthRequest="200">
+                <Slider Maximum="126" Minimum="0" Grid.Row="1" Value="{Binding Speed, Mode=TwoWay}" MinimumWidthRequest="200" HorizontalOptions="Fill">
               </Slider>
                 <Label Text="{Binding Speed}" Style="{StaticResource Header}" VerticalTextAlignment="Center"></Label>
           </StackLayout>
 
-            <StackLayout Orientation="Horizontal" Grid.Row="2">
+            <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Fill">
                 <Label Text="Reverse" Style="{StaticResource Header}" VerticalTextAlignment="Center"></Label>
                 <Slider Maximum="1" Minimum="0" Grid.Row="1" Value="{Binding Direction}" Style="{x:Null}" MinimumWidthRequest="50">
               </Slider>
                 <Label Text="Forwards" Style="{StaticResource Header}" VerticalTextAlignment="Center"></Label>
               <Button Text="Lights" Margin="30,3,3,3" Command="{Binding ToggleLightsCommand}"></Button>
-          </StackLayout>-->
+          </StackLayout>
         </Grid>
-  </ContentView.Content>
-</ContentView>
+  </ViewCell.View>
+</ViewCell>
