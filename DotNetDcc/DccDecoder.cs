@@ -2,7 +2,10 @@
 
 namespace DccControllersLibNetStandard
 {
-    public class DccDecoder
+    using System.ComponentModel;
+    using System.Runtime.CompilerServices;
+
+    public class DccDecoder : INotifyPropertyChanged
     {
         private RelayCommand toggleLightsCommand;
 
@@ -60,6 +63,7 @@ namespace DccControllersLibNetStandard
             {
                 speed = value;
                 this.UpdateLocomotion();
+                this.OnPropertyChanged();
             }
         }
 
@@ -112,6 +116,13 @@ namespace DccControllersLibNetStandard
             {
                 this.sendCommandDelegate?.Invoke($"<f {this.address} 122>");
             }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
