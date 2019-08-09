@@ -13,6 +13,10 @@ namespace DCCMobileController.Views
         public MainPage()
         {
             InitializeComponent();
+
+            // Disable swiping to change tab
+            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
+
         }
     }
 }
