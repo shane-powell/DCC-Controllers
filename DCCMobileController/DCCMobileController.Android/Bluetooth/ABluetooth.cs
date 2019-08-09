@@ -37,7 +37,7 @@ namespace DCCMobileController.Droid.Bluetooth
         /// <summary>
         /// The messages to send.
         /// </summary>
-        private readonly List<string> messagesToSend = new List<string>();
+        private readonly Queue<string> messagesToSend = new Queue<string>();
 
         /// <summary>
         /// The message lock object.
@@ -135,8 +135,8 @@ namespace DCCMobileController.Droid.Bluetooth
                                 await socket.ConnectAsync();
                                 using (var writer = new OutputStreamWriter(socket.OutputStream))
                                 {
-                                    writer.Write("hello");
-                                    writer.Flush();
+                                    //writer.Write("hello");
+                                    //writer.Flush();
 
                                     if (socket.IsConnected)
                                     {
@@ -149,8 +149,9 @@ namespace DCCMobileController.Droid.Bluetooth
                                                 {
                                                     lock (this.messageLockObject)
                                                     {
-                                                        foreach (var message in this.messagesToSend)
+                                                        while (this.messagesToSend.Count > 0)
                                                         {
+                                                            var message = this.messagesToSend.Dequeue();
                                                             writer.Write(message);
                                                             writer.Flush();
                                                         }
@@ -244,7 +245,7 @@ namespace DCCMobileController.Droid.Bluetooth
         {
             lock (this.messageLockObject)
             {
-                this.messagesToSend.Add(messageToSend);
+                this.messagesToSend.Enqueue(messageToSend);
             }
         }
 

@@ -24,7 +24,10 @@ namespace DCCMobileController.ViewModels
 
         private string selectedDevice = "HC-06";
 
-        private readonly DccController controller = new DccController();
+        /// <summary>
+        /// The controller.
+        /// </summary>
+        private readonly DccController controller = new DccController(DependencyService.Get<IBluetooth>().Send);
 
 
 
@@ -75,7 +78,8 @@ namespace DCCMobileController.ViewModels
                 Application.Current.MainPage.DisplayAlert("Attention", ex.Message, "Ok");
             }
 
-            //DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
+            DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
+            
         }
 
 

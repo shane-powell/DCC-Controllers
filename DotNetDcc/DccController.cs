@@ -32,6 +32,8 @@ namespace DccControllersLibNetStandard
 
         private RelayCommand togglePowerCommand;
 
+        private Action<string> sendCommandDelegate = null;
+
         public ObservableCollection<DccDecoder> Decoders
         {
             get
@@ -74,10 +76,10 @@ namespace DccControllersLibNetStandard
             set { togglePowerCommand = value; }
         }
 
-        public DccController()
+        public DccController(Action<string> sendCommandDelegate = null)
         {
             this.TogglePowerCommand = new RelayCommand(this.TogglePower);
-
+            this.sendCommandDelegate = sendCommandDelegate;
             for (int i = 1; i < 7; i++)
             {
                 DccDecoder decoder = new DccDecoder(this.SendCommand) {Address = i, Name = $"Loco {i}"};
@@ -94,6 +96,7 @@ namespace DccControllersLibNetStandard
         private void SendCommand(string command)
         {
             this.serialAdapter?.WriteString(command);
+            this.sendCommandDelegate?.Invoke(command);
         }
 
         private void ConnectToPort()
