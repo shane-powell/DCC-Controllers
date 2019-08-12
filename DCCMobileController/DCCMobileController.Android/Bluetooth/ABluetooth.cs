@@ -135,8 +135,8 @@ namespace DCCMobileController.Droid.Bluetooth
                                 await socket.ConnectAsync();
                                 using (var writer = new OutputStreamWriter(socket.OutputStream))
                                 {
-                                    writer.Write("<1>");
-                                    writer.Flush();
+                                    // writer.Write("<1>");
+                                    // writer.Flush();
 
                                     if (socket.IsConnected)
                                     {

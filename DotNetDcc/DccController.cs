@@ -65,8 +65,8 @@ namespace DccControllersLibNetStandard
             get { return power; }
             set
             {
-                power = value; 
-
+                this.power = value;
+                this.SendCommand(this.power ? "<1>" : "<0>");
             }
         }
 
@@ -89,8 +89,7 @@ namespace DccControllersLibNetStandard
 
         private void TogglePower()
         {
-            this.power = !this.power;
-            this.SendCommand(power ? "<1>" : "<0>");
+            this.Power = !this.power;
         }
 
         private void SendCommand(string command)

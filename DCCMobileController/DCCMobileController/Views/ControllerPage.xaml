@@ -8,6 +8,10 @@
              x:Class="DCCMobileController.Views.ControllerPage">
     <ContentPage.Content>
         <StackLayout>
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Power" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="28"></Label>
+                <Switch IsToggled="{Binding Controller.Power}"></Switch>
+            </StackLayout>
             <ListView ItemsSource="{Binding Controller.Decoders}" HasUnevenRows="True" VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate>
                     <DataTemplate>
