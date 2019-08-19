@@ -42,9 +42,9 @@
                     <ColumnDefinition Width="Auto"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Text="Speed" Style="{StaticResource Header}" VerticalTextAlignment="Center" Grid.Column="0"></Label>
-                <Slider Maximum="126" Minimum="0" Grid.Row="0" Value="{Binding Speed}" BackgroundColor="Aqua" Grid.Column="1">
+                <Slider HeightRequest="20" Maximum="126" Minimum="0" Grid.Row="0" Value="{Binding Speed}" Grid.Column="1">
               </Slider>
-                <Label Text="{Binding Speed}" Style="{StaticResource Header}" VerticalTextAlignment="Center" Margin="3" Grid.Column="2"></Label>
+                <Label Text="{Binding Speed}" Style="{StaticResource Header}" VerticalTextAlignment="Center" Margin="3" Grid.Column="2" MinimumWidthRequest="50"></Label>
           </Grid>
 
             <StackLayout Orientation="Horizontal" Grid.Row="2" HorizontalOptions="Fill">
