@@ -21,8 +21,17 @@
                 <views:ControllerPage BindingContext="{x:Reference MainContext}"/>
             </x:Arguments>
         </NavigationPage>
-        
-        <NavigationPage Title="About">
+        <NavigationPage Title="Config">
+            <NavigationPage.Icon>
+                <OnPlatform x:TypeArguments="FileImageSource">
+                    <On Platform="iOS" Value="tab_config.png"/>
+                </OnPlatform>
+            </NavigationPage.Icon>
+            <x:Arguments>
+                <views:ConfigPage />
+            </x:Arguments>
+        </NavigationPage>
+        <!--<NavigationPage Title="About">
             <NavigationPage.Icon>
                 <OnPlatform x:TypeArguments="FileImageSource">
                     <On Platform="iOS" Value="tab_about.png"/>
@@ -31,7 +40,7 @@
             <x:Arguments>
                 <views:AboutPage />
             </x:Arguments>
-        </NavigationPage>
+        </NavigationPage>-->
     </TabbedPage.Children>
     
 </TabbedPage>

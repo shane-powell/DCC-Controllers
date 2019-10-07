@@ -18,15 +18,6 @@
                   <Setter Property="Margin" Value="3,3,3,3"></Setter>
               </Style>
             </StackLayout.Resources>
-          <!--<Grid.RowDefinitions>
-              <RowDefinition Height="Auto"></RowDefinition>
-              <RowDefinition Height="Auto"></RowDefinition>
-              <RowDefinition Height="Auto"></RowDefinition>
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>-->
 
             <StackLayout Orientation="Horizontal" Grid.Row="0" HorizontalOptions="Fill">
               <Label Text="Name:" Style="{StaticResource Header}"></Label>
