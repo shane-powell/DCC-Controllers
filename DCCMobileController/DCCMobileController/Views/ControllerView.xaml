@@ -44,6 +44,7 @@
               </Slider>
                 <Label Text="Forwards" Style="{StaticResource Header}" VerticalTextAlignment="Center"></Label>
               <Button Text="Lights" Margin="30,3,3,3" Command="{Binding ToggleLightsCommand}"></Button>
+                <Button Text="Edit" Margin="3,3,3,3"></Button>
           </StackLayout>
         </StackLayout>
   </ViewCell.View>

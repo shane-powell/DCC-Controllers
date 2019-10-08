@@ -116,5 +116,10 @@ namespace DccControllersLibNetStandard
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public void ProcessBaseStationReply(string obj)
+        {
+            
+        }
     }
 }

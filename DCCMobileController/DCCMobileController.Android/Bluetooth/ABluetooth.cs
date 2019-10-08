@@ -49,6 +49,8 @@ namespace DCCMobileController.Droid.Bluetooth
         /// </summary>
         private CancellationTokenSource cancellationTokenSource;
 
+        private Action<string> incomingMessageDelegate;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ABluetooth"/> class.
         /// </summary>
@@ -188,6 +190,8 @@ namespace DCCMobileController.Droid.Bluetooth
                                                                 (App)Xamarin.Forms.Application.Current,
                                                                 "NewMessage",
                                                                 incomingData);
+
+                                                            this.incomingMessageDelegate?.Invoke(incomingData);
                                                         }
                                                     }
 
@@ -265,5 +269,9 @@ namespace DCCMobileController.Droid.Bluetooth
             return devices;
         }
 
+        public void SetIncomingMessageDelegate(Action<string> incomingMessageDelegate)
+        {
+            this.incomingMessageDelegate = incomingMessageDelegate;
+        }
     }
 }

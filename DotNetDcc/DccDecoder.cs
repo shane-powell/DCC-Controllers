@@ -1,17 +1,29 @@
-﻿using System;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DccDecoder.cs" company="Shane Powell">
+//   
+// </copyright>
+// <summary>
+//   Defines the DccDecoder type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace DccControllersLibNetStandard
 {
+    using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
 
     public class DccDecoder : INotifyPropertyChanged
     {
-        private RelayCommand toggleLightsCommand;
+        private const int ShortAddressCV = 1;
+
+        private readonly RelayCommand toggleLightsCommand;
 
         private Action<string> sendCommandDelegate = null;
 
         private int address = 0;
+
+        private int newAddress = 0;
 
         private string name = "New Loco";
 
@@ -86,6 +98,13 @@ namespace DccControllersLibNetStandard
             this.sendCommandDelegate?.Invoke($"<t 1 {this.address} {this.speed} {this.direction}>");
         }
 
+        private void ReassignAddress()
+        {
+            this.sendCommandDelegate?.Invoke($"<w {this.address} {ShortAddressCV} {this.newAddress}>");
+            this.sendCommandDelegate?.Invoke($"<W {this.address} {ShortAddressCV} {this.newAddress}>");
+
+        }
+
         public bool Lights
         {
             get { return lights; }
@@ -95,13 +114,18 @@ namespace DccControllersLibNetStandard
         public RelayCommand ToggleLightsCommand
         {
             get { return toggleLightsCommand; }
-            set { toggleLightsCommand = value; }
+        }
+
+        public int NewAddress
+        {
+            get => this.newAddress;
+            set => this.newAddress = value;
         }
 
         public DccDecoder(Action<string> sendCommandDelegate)
         {
             this.sendCommandDelegate = sendCommandDelegate;
-            this.ToggleLightsCommand = new RelayCommand(this.ToggleLights);
+            this.toggleLightsCommand = new RelayCommand(this.ToggleLights);
         }
 
         private void ToggleLights()

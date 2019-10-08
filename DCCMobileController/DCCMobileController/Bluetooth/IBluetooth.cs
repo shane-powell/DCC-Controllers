@@ -9,6 +9,7 @@
 
 namespace DCCMobileController.Bluetooth
 {
+    using System;
     using System.Collections.ObjectModel;
 
     /// <summary>
@@ -50,6 +51,8 @@ namespace DCCMobileController.Bluetooth
         /// A collection of paired devices.
         /// </returns>
         ObservableCollection<string> PairedDevices();
+
+        void SetIncomingMessageDelegate(Action<string> incomingMessageDelegate);
     }
 
 }

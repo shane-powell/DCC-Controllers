@@ -4,16 +4,19 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="DCCMobileController.Views.ConfigPage">
+             x:Class="DCCMobileController.Views.DecoderEditorPage">
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Reassign Decoder Address"></Label>
             <StackLayout Orientation="Horizontal">
+                <Label Text="Current Address"></Label>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
                 <Label Text="New Address" VerticalTextAlignment="Center"></Label>
-                <Entry Text="0" HorizontalTextAlignment="End"></Entry>
+                <Entry Text="0" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="Fill"></Entry>
                 <Stepper></Stepper>
             </StackLayout>
-            <Button Text="Send"></Button>
+            <Button Text="Reassign" Margin="3" HorizontalOptions="Center" WidthRequest="200"></Button>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

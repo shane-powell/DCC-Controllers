@@ -78,6 +78,8 @@ namespace DCCMobileController.ViewModels
                 Application.Current.MainPage.DisplayAlert("Attention", ex.Message, "Ok");
             }
 
+            DependencyService.Get<IBluetooth>().SetIncomingMessageDelegate(this.controller.ProcessBaseStationReply);
+
             DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
             
         }
