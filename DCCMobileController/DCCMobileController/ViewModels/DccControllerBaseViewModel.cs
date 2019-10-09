@@ -27,12 +27,17 @@ namespace DCCMobileController.ViewModels
         /// <summary>
         /// The controller.
         /// </summary>
-        private readonly DccController controller = new DccController(DependencyService.Get<IBluetooth>().Send);
+        private readonly DccController controller;
 
-
+        private void OpenEditDecoderPage(DccDecoder dccDecoder)
+        {
+            // todo open edit page
+        }
 
         public DccControllerBaseViewModel()
         {
+            DccController controller = new DccController(DependencyService.Get<IBluetooth>().Send, this.OpenEditDecoderPage);
+
             MessagingCenter.Subscribe<App>(this, "Sleep", (obj) =>
                 {
                     // When the app "sleep", I close the connection with bluetooth

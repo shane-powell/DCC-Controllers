@@ -34,6 +34,8 @@ namespace DccControllersLibNetStandard
 
         private Action<string> sendCommandDelegate = null;
 
+        private Action<DccDecoder> editDecoderDelegate;
+
         public ObservableCollection<DccDecoder> Decoders
         {
             get
@@ -76,13 +78,15 @@ namespace DccControllersLibNetStandard
             set { togglePowerCommand = value; }
         }
 
-        public DccController(Action<string> sendCommandDelegate = null)
+        public DccController(Action<string> sendCommandDelegate = null, Action<DccDecoder> editDecoderDelegate = null)
         {
             this.TogglePowerCommand = new RelayCommand(this.TogglePower);
             this.sendCommandDelegate = sendCommandDelegate;
+            this.editDecoderDelegate = editDecoderDelegate;
+
             for (int i = 1; i < 7; i++)
             {
-                DccDecoder decoder = new DccDecoder(this.SendCommand) {Address = i, Name = $"Loco {i}"};
+                DccDecoder decoder = new DccDecoder(this.SendCommand, this.editDecoderDelegate) { Address = i, Name = $"Loco {i}" };
                 this.decoders.Add(decoder);
             }
         }
