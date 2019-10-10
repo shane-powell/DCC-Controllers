@@ -52,6 +52,12 @@ namespace DCCMobileController.Bluetooth
         /// </returns>
         ObservableCollection<string> PairedDevices();
 
+        /// <summary>
+        /// The set incoming message delegate.
+        /// </summary>
+        /// <param name="incomingMessageDelegate">
+        /// The incoming message delegate.
+        /// </param>
         void SetIncomingMessageDelegate(Action<string> incomingMessageDelegate);
     }
 

@@ -36,14 +36,14 @@ namespace DCCMobileController.ViewModels
 
         public DccControllerBaseViewModel()
         {
-            DccController controller = new DccController(DependencyService.Get<IBluetooth>().Send, this.OpenEditDecoderPage);
+            controller = new DccController(DependencyService.Get<IBluetooth>().Send, this.OpenEditDecoderPage);
 
             MessagingCenter.Subscribe<App>(this, "Sleep", (obj) =>
                 {
                     // When the app "sleep", I close the connection with bluetooth
                     //if (this.isConnected)
                     //    DependencyService.Get<IBluetooth>().Cancel();
-
+                    
                 });
 
 

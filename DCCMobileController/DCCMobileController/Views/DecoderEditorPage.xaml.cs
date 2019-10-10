@@ -14,7 +14,8 @@ namespace DCCMobileController.Views
     {
         public DecoderEditorPage()
         {
-            InitializeComponent();
+            this.InitializeComponent();
+            
         }
     }
 }

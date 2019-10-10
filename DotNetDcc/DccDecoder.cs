@@ -19,8 +19,6 @@ namespace DccControllersLibNetStandard
 
         private readonly RelayCommand toggleLightsCommand;
 
-        private readonly RelayCommand editDecoderCommand;
-
         private Action<string> sendCommandDelegate = null;
 
         private int address = 0;
@@ -28,8 +26,6 @@ namespace DccControllersLibNetStandard
         private int newAddress = 0;
 
         private string name = "New Loco";
-
-        private Action<DccDecoder> editDecoderDelegate;
 
         /// <summary>
         /// The last speed value given send to the decoder
@@ -127,22 +123,10 @@ namespace DccControllersLibNetStandard
             set => this.newAddress = value;
         }
 
-        public RelayCommand EditDecoderCommand
-        {
-            get => this.editDecoderCommand;
-        }
-
-        public DccDecoder(Action<string> sendCommandDelegate, Action<DccDecoder> editDecoderDelegate)
+        public DccDecoder(Action<string> sendCommandDelegate)
         {
             this.sendCommandDelegate = sendCommandDelegate;
-            this.editDecoderDelegate = editDecoderDelegate;
             this.toggleLightsCommand = new RelayCommand(this.ToggleLights);
-            this.editDecoderCommand = new RelayCommand(this.EditDecoder);
-        }
-
-        private void EditDecoder()
-        {
-            this.editDecoderDelegate?.Invoke(this);
         }
 
         private void ToggleLights()

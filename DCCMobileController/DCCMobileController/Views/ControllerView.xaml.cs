@@ -17,5 +17,11 @@ namespace DCCMobileController.Views
 
                 this.InitializeComponent();
         }
+
+        private void BtnEdit_OnClicked(object sender, EventArgs e)
+        {
+            App.Current.MainPage.Navigation.PushAsync(
+                new DecoderEditorPage() { BindingContext = this.BindingContext });
+        }
     }
 }
