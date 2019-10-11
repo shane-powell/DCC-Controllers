@@ -50,6 +50,8 @@ namespace DccControllersLibNetStandard
             set
             {
                 this.address = value;
+                this.NewAddress = value;
+                this.OnPropertyChanged();
             }
         }
 
@@ -120,7 +122,11 @@ namespace DccControllersLibNetStandard
         public int NewAddress
         {
             get => this.newAddress;
-            set => this.newAddress = value;
+            set
+            {
+                this.newAddress = value;
+                this.OnPropertyChanged();
+            }
         }
 
         public DccDecoder(Action<string> sendCommandDelegate)

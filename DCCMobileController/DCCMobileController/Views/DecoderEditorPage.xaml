@@ -13,11 +13,12 @@
             <Label Text="Reassign Decoder Address" Style="{StaticResource labelHeaderStyle}"></Label>
             <StackLayout Orientation="Horizontal">
                 <Label Text="Current Address"></Label>
+                <Label Text="{Binding Address}"></Label>
             </StackLayout>
             <StackLayout Orientation="Horizontal" HorizontalOptions="Fill">
                 <Label Text="New Address" VerticalTextAlignment="Center"></Label>
-                <Entry Text="0" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="Fill"></Entry>
-                <Stepper></Stepper>
+                <Entry Text="{Binding NewAddress}" Keyboard="Numeric" HorizontalTextAlignment="End" HorizontalOptions="Fill"></Entry>
+                <Stepper Value="{Binding NewAddress}"></Stepper>
             </StackLayout>
             <Button Text="Reassign" Margin="3" HorizontalOptions="Center" WidthRequest="200"></Button>
         </StackLayout>
