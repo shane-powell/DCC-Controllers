@@ -22,7 +22,7 @@ namespace DCCMobileController.ViewModels
 
         private Command disconnectCommand = null;
 
-        private string selectedDevice = "HC-06";
+        private string selectedDevice = string.Empty;
 
         /// <summary>
         /// The controller.
@@ -36,14 +36,14 @@ namespace DCCMobileController.ViewModels
 
         public DccControllerBaseViewModel()
         {
-            controller = new DccController(DependencyService.Get<IBluetooth>().Send, this.OpenEditDecoderPage);
+            controller = new DccController(DependencyService.Get<IBluetooth>().Send);
 
             MessagingCenter.Subscribe<App>(this, "Sleep", (obj) =>
                 {
                     // When the app "sleep", I close the connection with bluetooth
                     //if (this.isConnected)
                     //    DependencyService.Get<IBluetooth>().Cancel();
-                    
+
                 });
 
 
@@ -57,26 +57,35 @@ namespace DCCMobileController.ViewModels
                 });
 
 
-            this.ConnectCommand = new Command(() => {
+            this.ConnectCommand = new Command(() =>
+            {
 
-                    // Try to connect to a bth device
+                // Try to connect to a bth device
+                if (DependencyService.Get<IBluetooth>().PairedDevices().Contains(this.selectedDevice))
+                {
                     DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
                     this.isConnected = true;
+                }
+                else
+                {
+                    Application.Current.MainPage.DisplayAlert("Attention", "Bluetooth device is not paired", "Ok");
+                }
 
-                });
 
-            this.DisconnectCommand = new Command(() => {
+            });
 
-                    // Disconnect from bth device
-                    DependencyService.Get<IBluetooth>().Cancel();
-                    this.isConnected = false;
-                });
+            this.DisconnectCommand = new Command(() =>
+            {
+
+                // Disconnect from bth device
+                DependencyService.Get<IBluetooth>().Cancel();
+                this.isConnected = false;
+            });
 
 
             try
             {
-                // At startup, I load all paired devices
-                ListOfDevices = DependencyService.Get<IBluetooth>().PairedDevices();
+                this.ListOfDevices = DependencyService.Get<IBluetooth>().PairedDevices();
             }
             catch (Exception ex)
             {
@@ -85,8 +94,8 @@ namespace DCCMobileController.ViewModels
 
             DependencyService.Get<IBluetooth>().SetIncomingMessageDelegate(this.controller.ProcessBaseStationReply);
 
-            DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
-            
+            // DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
+
         }
 
 

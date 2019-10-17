@@ -12,6 +12,7 @@ namespace DccControllersLibNetStandard
     using System;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Runtime.InteropServices;
 
     public class DccDecoder : INotifyPropertyChanged
     {
@@ -26,6 +27,8 @@ namespace DccControllersLibNetStandard
         private int newAddress = 0;
 
         private string name = "New Loco";
+
+        private Func<DccController.TrackType> getTrackTypeDelegate = null;
 
         /// <summary>
         /// The last speed value given send to the decoder
@@ -103,8 +106,21 @@ namespace DccControllersLibNetStandard
 
         private void ReassignAddress()
         {
-            this.sendCommandDelegate?.Invoke($"<w {this.address} {ShortAddressCV} {this.newAddress}>");
-            this.sendCommandDelegate?.Invoke($"<W {this.address} {ShortAddressCV} {this.newAddress}>");
+            var trackType = this.GetTrackType();
+
+            if (trackType == DccController.TrackType.Layout)
+            {
+                this.sendCommandDelegate?.Invoke($"<w {this.address} {ShortAddressCV} {this.newAddress}>");
+
+                // No confirmation so assume address has changed
+                this.address = this.newAddress;
+            }
+            else if (trackType == DccController.TrackType.Programming)
+            {
+                this.sendCommandDelegate?.Invoke($"<W {this.address} {ShortAddressCV} {this.newAddress} {this.address} 1>");
+
+                // Wait for Callback before changing anything
+            }
 
         }
 
@@ -129,10 +145,16 @@ namespace DccControllersLibNetStandard
             }
         }
 
-        public DccDecoder(Action<string> sendCommandDelegate)
+        public DccDecoder(Action<string> sendCommandDelegate, Func<DccController.TrackType> getTrackTypeDelegate)
         {
             this.sendCommandDelegate = sendCommandDelegate;
             this.toggleLightsCommand = new RelayCommand(this.ToggleLights);
+            this.getTrackTypeDelegate = getTrackTypeDelegate;
+        }
+
+        private DccController.TrackType GetTrackType()
+        {
+            return this.getTrackTypeDelegate?.Invoke() ?? DccController.TrackType.Programming;
         }
 
         private void ToggleLights()

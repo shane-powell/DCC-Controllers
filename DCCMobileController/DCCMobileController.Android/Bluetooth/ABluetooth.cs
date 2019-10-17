@@ -29,6 +29,8 @@ namespace DCCMobileController.Droid.Bluetooth
 
     using Xamarin.Forms;
 
+    using Console = System.Console;
+
     /// <summary>
     /// An Android implementation of the IBluetooth interface.
     /// </summary>
@@ -67,7 +69,7 @@ namespace DCCMobileController.Droid.Bluetooth
         {
             this.cancellationTokenSource?.Cancel();
             Thread.Sleep(sleepTime);
-            Task.Run(async () => this.DeviceConnectionLoop(name, sleepTime, readAsCharArray));
+            Task.Run(() => this.DeviceConnectionLoop(name, sleepTime, readAsCharArray));
         }
 
         /// <summary>
@@ -134,7 +136,17 @@ namespace DCCMobileController.Droid.Bluetooth
                         {
                             if (socket != null)
                             {
-                                await socket.ConnectAsync();
+                                try
+                                {
+                                    await socket.ConnectAsync();
+
+                                }
+                                catch (Exception e)
+                                {
+                                    this.BroadcastBluetoothStatus($"Could not connect to {name}");
+                                    return;
+                                }
+
                                 using (var writer = new OutputStreamWriter(socket.OutputStream))
                                 {
                                     // writer.Write("<1>");
@@ -240,7 +252,6 @@ namespace DCCMobileController.Droid.Bluetooth
         {
             if (this.cancellationTokenSource != null)
             {
-                System.Diagnostics.Debug.WriteLine("Send a cancel to task!");
                 this.cancellationTokenSource.Cancel();
             }
         }
@@ -257,7 +268,7 @@ namespace DCCMobileController.Droid.Bluetooth
         {
             BluetoothAdapter adapter = BluetoothAdapter.DefaultAdapter;
             ObservableCollection<string> devices = new ObservableCollection<string>();
-
+            
             if (adapter?.BondedDevices != null)
             {
                 foreach (var bd in adapter.BondedDevices)
