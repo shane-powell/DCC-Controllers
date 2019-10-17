@@ -34,8 +34,6 @@ namespace DccControllersLibNetStandard
 
         private Action<string> sendCommandDelegate = null;
 
-        private Action<DccDecoder> editDecoderDelegate;
-
         private TrackType selectedTrackType = TrackType.Layout;
 
         private List<TrackType> trackTypes = new List<TrackType>() {TrackType.Layout, TrackType.Programming};
@@ -100,11 +98,10 @@ namespace DccControllersLibNetStandard
             set => this.trackTypes = value;
         }
 
-        public DccController(Action<string> sendCommandDelegate = null, Action<DccDecoder> editDecoderDelegate = null)
+        public DccController(Action<string> sendCommandDelegate = null)
         {
             this.TogglePowerCommand = new RelayCommand(this.TogglePower);
             this.sendCommandDelegate = sendCommandDelegate;
-            this.editDecoderDelegate = editDecoderDelegate;
 
             for (int i = 1; i < 7; i++)
             {

@@ -1,18 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="clr-namespace:DCCMobileController.Views;assembly=DCCMobileController"
+             xmlns:dccControllersLibNetStandard="clr-namespace:DccControllersLibNetStandard;assembly=DccControllersLibNetStandard"
+             xmlns:viewModels="clr-namespace:DCCMobileController.ViewModels;assembly=DCCMobileController"
              mc:Ignorable="d"
-             x:Class="DCCMobileController.Views.ControllerPage">
+             x:Class="DCCMobileController.Views.ControllerPage"
+             d:DataContext="{d:DesignInstance Type= viewModels:DccControllerBaseViewModel, IsDesignTimeCreatable=false}">
     <ContentPage.Content>
         <StackLayout>
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Power" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="28"></Label>
+            <StackLayout Orientation="Horizontal" Margin="3">
+                <Label Text="Power" VerticalTextAlignment="Center" FontAttributes="Bold" FontSize="26"></Label>
                 <Switch IsToggled="{Binding Controller.Power}"></Switch>
+                <StackLayout HorizontalOptions="FillAndExpand">
+                    <!--<Label Text="Track selection" HorizontalTextAlignment="Center"></Label>-->
+                    <Picker FontAttributes="Bold" FontSize="26" Title="Track" HorizontalOptions="FillAndExpand" ItemsSource="{Binding Controller.TrackTypes}" SelectedItem="{Binding Controller.SelectedTrackType}"></Picker>
+                </StackLayout>
             </StackLayout>
-            <ListView ItemsSource="{Binding Controller.Decoders}" HasUnevenRows="True" VerticalOptions="FillAndExpand">
+            <ListView ItemsSource="{Binding Controller.Decoders}" HasUnevenRows="True" VerticalOptions="FillAndExpand" SeparatorColor="CadetBlue" SeparatorVisibility="Default">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <views:ControllerView></views:ControllerView>
