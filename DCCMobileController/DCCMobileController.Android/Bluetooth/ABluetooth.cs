@@ -67,7 +67,7 @@ namespace DCCMobileController.Droid.Bluetooth
         {
             this.cancellationTokenSource?.Cancel();
             Thread.Sleep(sleepTime);
-            Task.Run(async () => this.DeviceConnectionLoop(name, sleepTime, readAsCharArray));
+            Task.Run(() => this.DeviceConnectionLoop(name, sleepTime, readAsCharArray));
         }
 
         /// <summary>

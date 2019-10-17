@@ -36,6 +36,16 @@ namespace DccControllersLibNetStandard
 
         private Action<DccDecoder> editDecoderDelegate;
 
+        private TrackType selectedTrackType = TrackType.Layout;
+
+        private List<TrackType> trackTypes = new List<TrackType>() {TrackType.Layout, TrackType.Programming};
+
+        public enum TrackType
+        {
+            Layout = 1,
+            Programming = 2
+        }
+
         public ObservableCollection<DccDecoder> Decoders
         {
             get
@@ -78,6 +88,18 @@ namespace DccControllersLibNetStandard
             set { togglePowerCommand = value; }
         }
 
+        public TrackType SelectedTrackType
+        {
+            get => this.selectedTrackType;
+            set => this.selectedTrackType = value;
+        }
+
+        public List<TrackType> TrackTypes
+        {
+            get => this.trackTypes;
+            set => this.trackTypes = value;
+        }
+
         public DccController(Action<string> sendCommandDelegate = null, Action<DccDecoder> editDecoderDelegate = null)
         {
             this.TogglePowerCommand = new RelayCommand(this.TogglePower);
@@ -86,7 +108,7 @@ namespace DccControllersLibNetStandard
 
             for (int i = 1; i < 7; i++)
             {
-                DccDecoder decoder = new DccDecoder(this.SendCommand) { Address = i, Name = $"Loco {i}" };
+                DccDecoder decoder = new DccDecoder(this.SendCommand, () => this.selectedTrackType) { Address = i, Name = $"Loco {i}" };
                 this.decoders.Add(decoder);
             }
         }
