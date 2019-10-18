@@ -9,6 +9,7 @@ namespace DCCMobileController.ViewModels
     using DccControllersLibNetStandard;
 
     using DCCMobileController.Bluetooth;
+    using DCCMobileController.Views;
 
     using Xamarin.Forms;
 
@@ -55,6 +56,16 @@ namespace DCCMobileController.ViewModels
                     //    DependencyService.Get<IBluetooth>().Start(this.selectedDevice, this.sleepTime, true);
 
                 });
+
+            MessagingCenter.Subscribe<string>(this, "Bluetooth", (obj) =>
+                {
+                    Device.BeginInvokeOnMainThread(
+                        () =>
+                            {
+                                Application.Current.MainPage.DisplayAlert("Attention", obj.ToString(), "Ok");
+                            });
+                });
+
 
 
             this.ConnectCommand = new Command(() =>

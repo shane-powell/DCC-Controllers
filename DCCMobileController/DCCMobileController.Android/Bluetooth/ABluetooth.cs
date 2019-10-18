@@ -23,6 +23,7 @@ namespace DCCMobileController.Droid.Bluetooth
 
     using DCCMobileController;
     using DCCMobileController.Bluetooth;
+    using DCCMobileController.Views;
 
     using Java.IO;
     using Java.Util;
@@ -80,7 +81,7 @@ namespace DCCMobileController.Droid.Bluetooth
         /// </param>
         private void BroadcastBluetoothStatus(string statusMessage)
         {
-            MessagingCenter.Send<App, string>((App)Application.Current, "BluetoothStatus", statusMessage);
+            MessagingCenter.Send(statusMessage, "Bluetooth");
         }
 
         private async Task DeviceConnectionLoop(string name, int sleepTime, bool readAsCharArray)
